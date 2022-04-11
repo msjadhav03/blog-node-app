@@ -60,7 +60,102 @@ function getAllBlog(req,res)
         )
     })
 }
+function deleteBlog(req,res)
+{
+  if(req.body._id != null)
+  {
+    BlogServices.deleteBlogById(req.body._id).then((result)=>
+    {
+      if(result == true)
+      {
+        res.status(201).json(
+          {
+            code : 201,
+            name : 'deleted',
+            message : 'Deleted successfully - Blog '
+          }
+        )
+      }else
+      {
+        res.status(400).json(
+          {
+            code  : 400,
+            name : 'deletion_failed',
+            error : 'Cannot be deleted - status'
+          }
+        )
+      }
+    }).catch((err)=>
+    {
+      res.status(503).json(
+        {
+          code : 503,
+          name : err.name,
+          error : err.err
+        }
+      )
+    })
+  }else
+  {
+    res.status(400).json(
+      {
+        code : 400,
+        name : 'fields_missing',
+        error : 'Required field missing - _id'
+      }
+    )
+  }
+}
+
+function updateBlog(req,res)
+{
+  if(req.body._id != null)
+  {
+    BlogServices.updateBlogById(req.body).then((result)=>
+    {
+      if(result == true)
+      {
+        res.status(201).json(
+          {
+            code : 201,
+            name : 'updated',
+            message : 'Upated successfully - Blog '
+          }
+        )
+      }else
+      {
+        res.status(400).json(
+          {
+            code  : 400,
+            name : 'updation_failed',
+            error : 'Cannot be Updated - status'
+          }
+        )
+      }
+    }).catch((err)=>
+    {
+      res.status(503).json(
+        {
+          code : 503,
+          name : err.name,
+          error : err.err
+        }
+      )
+    })
+  }else
+  {
+    res.status(400).json(
+      {
+        code : 400,
+        name : 'fields_missing',
+        error : 'Required field missing - _id'
+      }
+    )
+  }
+}
 module.exports = {
   addNewBlog,
-  getAllBlog
-};
+  getAllBlog,
+  deleteBlog,
+  updateBlog
+}
